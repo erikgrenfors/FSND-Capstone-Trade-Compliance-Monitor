@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="/static/css/app.css" rel="stylesheet">
+    </head>
+    <body class="home">
+        <div class="container">
+            <div class="login-page clearfix">
+                <h1 id="logo"><img src="https://nordfk.se/static/images/elements/site-logo_new.svg" /></h1>
+                <h1>Welcome</h1>
+                <h1>{{user_email}}</h1>
+                <div class="login-text">
+                    <ol>
+                        <li>Copy the token below</li>
+                        <li>Proceed to <a href="/apidocs/" target="_blank">swagger ui</a></li>
+                        <li>Click Authorize button</li>
+                        <li>Paste the token, authorize and close</li>
+                    </ol>
+                </div>
+                <div class="token">
+                    <p>{{access_token}}</p>
+                </div>
+                <div class="login-box">
+                    <a id="qsLogoutBtn" class="btn btn-primary btn-lg btn-logout btn-block" href="/logout">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

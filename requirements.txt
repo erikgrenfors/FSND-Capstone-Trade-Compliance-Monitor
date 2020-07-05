@@ -1,0 +1,11 @@
+apispec
+authlib>=0.14.1
+flasgger
+flask
+flask_migrate
+Flask-Session
+marsmallow
+psycopg2
+python-jose
+requests
+simplejson
