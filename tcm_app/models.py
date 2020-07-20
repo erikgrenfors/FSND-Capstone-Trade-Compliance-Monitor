@@ -94,8 +94,7 @@ class TradeSchema(Schema):
         required=True, validate=validate_isin, example='US0378331005')
     name = fields.Str(required=True, example='Apple Inc')
     direction = fields.Str(
-        required=True, validate=validate.OneOf(['Buy', 'Sell']), example='Buy',
-        description='Buy or Sell')
+        required=True, validate=validate.OneOf(['Buy', 'Sell']), example='Buy')
     quantity = fields.Decimal(required=False, example=100)
     price = fields.Decimal(example=364.11)
     currency = fields.Str(
@@ -103,7 +102,7 @@ class TradeSchema(Schema):
         description='A three letter long code')
     amount = fields.Decimal(required=False, example=36411)
     date = fields.Date(required=True, validate=validate_not_future_date)
-    reporter = fields.Str(dump_only=True, example='Logedin User')
+    reporter = fields.Str(dump_only=True, example='john.doe@example.com')
     reported_at = fields.DateTime(dump_only=True, description='UTC')
 
     # Required to handle Decimal type, see documentation for fields.Decimal()
