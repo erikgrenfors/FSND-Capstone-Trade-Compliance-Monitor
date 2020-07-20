@@ -1,14 +1,16 @@
+import os
+
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
 from flasgger import APISpec, Swagger
 from flask import Flask
-from flask_session import Session
 from flask_migrate import Migrate
+from flask_session import Session
 
 from tcm_app.models import TradeSchema
 
 
-def create_app(config_filename='config.py'):
+def create_app():
     """Application factory based on:
     * https://flask.palletsprojects.com/en/1.1.x/patterns/appfactories/#basic-factories
     * https://flask.palletsprojects.com/en/1.1.x/tutorial/factory/#the-application-factory
@@ -19,7 +21,7 @@ def create_app(config_filename='config.py'):
     # ---
     # CONFIGURATION
     # ---
-    app.config.from_pyfile(config_filename)
+    app.config.from_object(os.environ['APP_SETTINGS'])
     app.config['JSON_SORT_KEYS'] = False
     app.config['SESSION_TYPE'] = 'filesystem'  # Flask-Session
     Session(app)
