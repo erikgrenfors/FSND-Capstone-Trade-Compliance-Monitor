@@ -239,13 +239,13 @@ bp.add_url_rule(
 
 
 class ViolationsView(SwaggerView):
+    tags = ['violations']
+
     @require_token('get:violations')
     def get(self):
         """
         Fetch all trades (for the authenticated user) that violate holding period regulation.
         ---
-        tags:
-        - violations
         responses:
           200:
             content:
