@@ -251,9 +251,31 @@ class ViolationsView(SwaggerView):
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Trade'  # TODO
+                  type: object
+                  properties:
+                    violations:
+                      type: integer
+                      description: Number of violations.
+                      example: 1
+                    data:
+                      type: array
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            duration:
+                              type: integer
+                              description: Number of days.
+                              example: 1
+                            data:
+                              type: array
+                              items:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/Trade'
+                                minItems: 2
+                                maxItems: 2
           204:
             description: When there are no trade violations.
         """
@@ -381,7 +403,7 @@ def find_violations(trades):
         violating = closed_positions[too_quick & with_profit]
 
         if len(violating) != 0:
-            violating_by_duration = {}
+            violating_by_duration = []
             by_duration = violating.groupby('duration')
             for duration, position_df in by_duration:
                 buy_sell_pairs = []
@@ -402,7 +424,10 @@ def find_violations(trades):
                     buy_sell_pairs.append(trades_schema.dump(trade_data))
                     ctr_violations += 1
 
-                violating_by_duration[duration] = buy_sell_pairs
+                violating_by_duration.append({
+                    'duration': duration,
+                    'data': buy_sell_pairs
+                })
 
             violations_by_isin.append(violating_by_duration)
 
