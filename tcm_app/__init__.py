@@ -85,10 +85,7 @@ def create_app():
                                 app.config['AUTH0_AUDIENCE']
                             ),
                             'scopes':{
-                                # Contrary to authorizationCodeFlow scope
-                                # 'openid' is not needed.
-
-                                # 'openid': '',
+                                'openid': '',
                                 'email': ''
                             }
                         }
