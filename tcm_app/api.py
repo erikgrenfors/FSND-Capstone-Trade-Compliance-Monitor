@@ -334,6 +334,84 @@ bp.add_url_rule(
     methods=['GET']
 )
 
+
+class AllViolationsView(SwaggerView):
+    tags = ['all-violations']
+
+    @require_token('get:all-violations')
+    def get(self):
+        """
+        Fetch all trades (for all users) that violate holding period regulation.
+        ---
+        responses:
+          200:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reporter:
+                        type: string
+                        example: john.doe@example.com
+                      data:
+                        type: object
+                        properties:
+                          violations:
+                            type: integer
+                            description: Number of violations.
+                            example: 1
+                          data:
+                            type: array
+                            items:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  duration:
+                                    type: integer
+                                    description: Number of days.
+                                    example: 1
+                                  data:
+                                    type: array
+                                    items:
+                                      type: array
+                                      items:
+                                        $ref: '#/components/schemas/Trade'
+                                      minItems: 2
+                                      maxItems: 2
+          204:
+            description: When there are no trade violations.
+        """
+        # Query DB for all trades and store in a Pandas dataframe.
+        trades = pd.read_sql(
+            Trade.query.order_by(Trade.date.asc()).statement, db.session.bind)
+
+        # # One list item per ISIN.
+        violations_by_reporter = []
+        by_reporter = trades.groupby('reporter')
+        for reporter, trades_ in by_reporter:
+            violations = find_violations(trades_)
+            if violations is not None:
+                violations_by_reporter.append({
+                    'reporter': reporter,
+                    'data': violations
+                })
+
+        if len(violations_by_reporter) == 0:
+            return make_response_204()
+
+        return jsonify(violations_by_reporter)
+
+
+bp.add_url_rule(
+    '/all-violations',
+    view_func=AllViolationsView.as_view('all-violations_endpoint'),
+    methods=['GET']
+)
+
+
 @bp.errorhandler(Exception)
 def errorhandler(ex):
     if not isinstance(ex, HTTPException):
