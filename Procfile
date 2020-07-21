@@ -1,0 +1,1 @@
+web: gunicorn "tcm_app:create_app()"
