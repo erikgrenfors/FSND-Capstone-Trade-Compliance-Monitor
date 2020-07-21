@@ -35,7 +35,7 @@ class TradeComplianceMonitor(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.app = create_app(config_filename='config.py')
+        self.app = create_app()
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
