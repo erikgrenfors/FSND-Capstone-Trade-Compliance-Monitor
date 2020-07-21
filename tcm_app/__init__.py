@@ -7,6 +7,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_session import Session
 
+from flask_cors import CORS
 from tcm_app.models import TradeSchema
 
 
@@ -17,6 +18,7 @@ def create_app():
     """
     app = Flask(
         __name__, static_url_path='/static/css', static_folder='./static/css')
+    CORS(app)
 
     # ---
     # CONFIGURATION

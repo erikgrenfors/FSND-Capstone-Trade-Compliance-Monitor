@@ -12,6 +12,7 @@ cryptography==2.9.2
 ecdsa==0.15
 flasgger==0.9.4
 Flask==1.1.2
+Flask-Cors==3.0.8
 Flask-Migrate==2.5.3
 Flask-Session==0.3.2
 Flask-SQLAlchemy==2.4.4
