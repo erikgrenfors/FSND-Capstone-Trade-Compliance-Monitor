@@ -438,6 +438,9 @@ def find_violations(trades):
     for isin, trades in grouped_by_isin:
         # Create separate DataFrames for buy and sell.
         by_direction = trades.groupby('direction')
+        if len(by_direction) == 1:
+            continue
+
         buy = by_direction.get_group('Buy').copy(deep=False)
         buy.reset_index(drop=True, inplace=True)
         sell = by_direction.get_group('Sell').copy(deep=False)
