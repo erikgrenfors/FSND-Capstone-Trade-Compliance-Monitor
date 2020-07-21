@@ -139,7 +139,8 @@ def create_app():
             # Needed for implicitFlow
             'oauth2RedirectUrl': '{}/oauth2-redirect'.format(
                 app.config['SWAGGER_BASE_URL']
-            )
+            ),
+            'tagsSorter' : "alpha"
         }
     }
 
