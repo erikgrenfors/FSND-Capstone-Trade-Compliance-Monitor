@@ -80,12 +80,11 @@ class TradesView(SwaggerView):
             reporter=self.email,  # Originates from userinfo for current access token
             reported_at=datetime.utcnow()
         )
-        db.session.add(trade)  # TODO refactor as method to model
-        db.session.commit()
 
-        # Serialize
-        result = trade_schema.dump(trade)
-        return jsonify(result)
+        # Persist in db and serialise
+        serialised_trade = trade.create()
+
+        return jsonify(serialised_trade)
 
 
 bp.add_url_rule(
@@ -186,14 +185,10 @@ class TradeView(SwaggerView):
             trade.reported_at = datetime.utcnow()
             trail.trailed_at = trade.reported_at
 
-            # Serialize
-            out = trade_schema.dump(trade)
+            # Persist in db and serialise
+            serialised_trade = trade.update()
 
-            # Persist data in database
-            db.session.add(trail)
-            trade.update()
-
-            return jsonify(out)
+            return jsonify(serialised_trade)
         else:
             return make_response_204()
 

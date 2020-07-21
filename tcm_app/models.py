@@ -54,8 +54,27 @@ class Trade(db.Model):
             [f'{key}={str(value)}' for (key, value) in items if key[0] != '_']
         ))
 
+    def create(self):
+        """Creates model in db and sends it back serialised.
+        """
+        error = False
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except BaseException:
+            print(sys.exc_info())
+            db.session.rollback()
+            error = True
+        finally:
+            serialised = trade_schema.dump(self)
+            db.session.close()
+            return serialised
+
+        if error:
+            abort(422)
+
     def update(self):
-        """Updates model into db.
+        """Updates model in db and sends it back serialised.
         """
         error = False
         try:
@@ -65,7 +84,9 @@ class Trade(db.Model):
             db.session.rollback()
             error = True
         finally:
+            serialised = trade_schema.dump(self)
             db.session.close()
+            return serialised
 
         if error:
             abort(422)
