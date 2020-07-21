@@ -26,7 +26,7 @@ A **Compliance Officer** will:
 
 ## Authorization, Permissions and Roles
 
-The API requires an authorization and permission mechanism and is handling this by a JSON Web Token (JWT). Illustrated by a live application running on Heroku a JWT can be requested either from a [Portal](https://erigre.herokuapp.com/) using [Authorization Code Flow](https://auth0.com/docs/flows/concepts/auth-code) or from the [Swagger UI](https://erigre.herokuapp.com/apidocs/) using [Implicit Flow](https://auth0.com/docs/flows/concepts/implicit). The JWT carries permissions to represent the two above mentioned roles.
+The API requires an authorization and permission mechanism and is handling this by a JSON Web Token (JWT). Illustrated by a live mock application running on Heroku a JWT can be requested either from a [Portal](https://erigre.herokuapp.com/) using [Authorization Code Flow](https://auth0.com/docs/flows/concepts/auth-code) or from the [Swagger UI](https://erigre.herokuapp.com/apidocs/) using [Implicit Flow](https://auth0.com/docs/flows/concepts/implicit). The JWT carries permissions to represent the two above mentioned roles.
 
 Permissions:
 
@@ -42,7 +42,7 @@ Permissions:
   * get:all-trades
   * get:all-violations
 
-For the application running live on Heroku any user logging in for the first time will be assigned the role **Employee** automatically. This is accomplished within the Auth0.com service (example code [here](https://community.auth0.com/t/how-do-i-add-a-default-role-to-a-new-user-on-first-login/25857)). Assigning a user the role **Compliance Officer** is done manually.
+For the live mock application running on Heroku any user logging in for the first time will be assigned the role **Employee** automatically. This is accomplished within the Auth0.com service (example code [here](https://community.auth0.com/t/how-do-i-add-a-default-role-to-a-new-user-on-first-login/25857)). Assigning a user the role **Compliance Officer** is done manually. Read section *Testing the application* for info on a dummy Compliance Officer.
 
 
 ## API Documentation
@@ -96,17 +96,27 @@ Example below uses development configuration.
 Execute:
 ```bash
 export APP_SETTINGS="config.DevelopmentConfig"
-export AUTH0_CLIENT_SECRET="a_secret_will_be_provided_by_auth0_at_app_setup"
 export APP_BASE_URL="http://127.0.0.1:5000"
+export AUTH0_CLIENT_SECRET="a_secret_will_be_provided_by_auth0_at_app_setup"
 flask run
 ```
 
 
 # Testing the application
+For testing two JWT will be required. Both can be acquired at the live mock application [here](https://erigre.herokuapp.com/). An `EMPLOYEE_ROLE_ACCESS_TOKEN` can be acquired by logging in by any user. A `CO_ROLE_ACCESS_TOKEN` can be acquired by logging in by using email **john.doe@example** and password **verySimple1**. Make sure to logout between each login.
+
+Please read section *Setting up local PostgreSQL database* for instructions on how to create `trade_compliance_monitor_test`, **but** note that database name now ends with "**test**" and not with "**dev**".
+
 Execute:
+
 ```bash
 export EMPLOYEE_ROLE_ACCESS_TOKEN=<jwt_for_user_with_employee_role>
 export CO_ROLE_ACCESS_TOKEN=<jwt_for_user_with_employee_role>
+export DB_NAME="trade_compliance_monitor_test"
+export DATABASE_URL="postgresql://postgres@localhost:5432/${DB_NAME}"
+export APP_SETTINGS="config.TestingConfig"
+export APP_BASE_URL="http://127.0.0.1:5000"
+export AUTH0_CLIENT_SECRET="a_secret_will_be_provided_by_auth0_at_app_setup"
 python -m unittest tests.test_api
 ```
 
