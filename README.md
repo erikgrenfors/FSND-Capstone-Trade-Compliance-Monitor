@@ -26,7 +26,7 @@ A **Compliance Officer** will:
 
 ## Authorization, Permissions and Roles
 
-The API requires an authorization and permission mechanism and is handling this by a JSON Web Token (JWT). Illustrated by a live mock application running on Heroku a JWT can be requested either from a [Portal](https://erigre.herokuapp.com/) using [Authorization Code Flow](https://auth0.com/docs/flows/concepts/auth-code) or from the [Swagger UI](https://erigre.herokuapp.com/apidocs/) using [Implicit Flow](https://auth0.com/docs/flows/concepts/implicit). The JWT carries permissions to represent the two above mentioned roles.
+The API requires an authorization and permission mechanism and is handling this by a JSON Web Token (JWT). Illustrated by a live mock application running on Heroku a JWT can be requested either from a [Portal](https://trade-compliance-monitor.herokuapp.com/) using [Authorization Code Flow](https://auth0.com/docs/flows/concepts/auth-code) or from the [Swagger UI](https://trade-compliance-monitor.herokuapp.com/apidocs/) using [Implicit Flow](https://auth0.com/docs/flows/concepts/implicit). The JWT carries permissions to represent the two above mentioned roles.
 
 Permissions:
 
@@ -47,7 +47,7 @@ For the live mock application running on Heroku any user logging in for the firs
 
 ## API Documentation
 
-The API becomes "Swagger documented" when the application is installed and running. For the application running live on Heroku look [here](https://erigre.herokuapp.com/apidocs/).
+The API becomes "Swagger documented" when the application is installed and running. For the application running live on Heroku look [here](https://trade-compliance-monitor.herokuapp.com/apidocs/).
 
 
 ## Stack
@@ -73,7 +73,7 @@ source env/Scripts/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
-
+Note: `gunicorn` isn't required for running the application locally.
 # Setting up local PostgreSQL database
 If not already on your system, download and install [PostgreSQL](https://www.postgresql.org/download/)
 Instructions below involves a user called "postgres". If your user is named differently, change accordingly. If you prefer a different database name than "trade_compliance_monitor_dev", change accordingly.
@@ -103,7 +103,7 @@ flask run
 
 
 # Testing the application
-For testing two JWT will be required. Both can be acquired at the live mock application [here](https://erigre.herokuapp.com/). An `EMPLOYEE_ROLE_ACCESS_TOKEN` can be acquired by logging in by any user. A `CO_ROLE_ACCESS_TOKEN` can be acquired by logging in by using email **john.doe@example** and password **verySimple1**. Make sure to logout between each login.
+For testing two JWT will be required. Both can be acquired at the live mock application [here](https://trade-compliance-monitor.herokuapp.com/). An `EMPLOYEE_ROLE_ACCESS_TOKEN` can be acquired by logging in by any user. A `CO_ROLE_ACCESS_TOKEN` can be acquired by logging in by using email **john.doe@example** and password **verySimple1**. Make sure to logout between each login.
 
 Please read section *Setting up local PostgreSQL database* for instructions on how to create `trade_compliance_monitor_test`, **but** note that database name now ends with "**test**" and not with "**dev**".
 
