@@ -279,6 +279,39 @@ bp.add_url_rule(
 )
 
 
+class AllTradesView(SwaggerView):
+    tags = ['all-trades']
+
+    @require_token('get:all-trades')
+    def get(self):
+        """
+        Fetch all trades reported by any reporter
+        ---
+        responses:
+          200:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Trade'
+          204:
+            description: When no trades exist.
+        """
+        # Query DB for all trades
+        trades = Trade.query.all()
+        if len(trades) == 0:
+            return make_response_204()
+        result = trades_schema.dump(trades)
+        return jsonify(result)
+
+
+bp.add_url_rule(
+    '/all-trades',
+    view_func=AllTradesView.as_view('all_trades_endpoint'),
+    methods=['GET']
+)
+
 @bp.errorhandler(Exception)
 def errorhandler(ex):
     if not isinstance(ex, HTTPException):
