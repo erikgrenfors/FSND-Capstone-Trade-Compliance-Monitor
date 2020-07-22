@@ -59,15 +59,16 @@ The API becomes "Swagger documented" when the application is installed and runni
 
 ##### Dependencies
 
-* Please refer to `requirements.txt`
+* `flasgger`, `Flask`, `marshmallow`, `pandas`, `python-jose`, `SQLAlchemy`. Please refer to `requirements.txt` or [dependency graph](https://github.com/erikgrenfors/trade-compliance-monitor/network/dependencies) for complete list.
 
 
 # Setting up the application
 
-Create a project folder named whatever you prefer.
+Create a project folder named whatever you prefer and enter into it.
 Within this folder, execute:
 
 ```
+git clone https://github.com/erikgrenfors/trade-compliance-monitor.git .
 virtualenv env
 source env/Scripts/activate
 python -m pip install --upgrade pip
@@ -80,21 +81,26 @@ Instructions below involves a user called "postgres". If your user is named diff
 Execute:
 
 ```bash
-export DB_NAME=trade_compliance_monitor_dev
+export DB_NAME="trade_compliance_monitor_dev"
 export DATABASE_URL="postgresql://postgres@localhost:5432/${DB_NAME}"
 dropdb -U postgres $DB_NAME
 createdb -U postgres $DB_NAME
-export FLASK_APP=tcm_app
-flask db init
-flask db migrate
+export FLASK_APP="tcm_app"
+export APP_SETTINGS="config.DevelopmentConfig"
+export APP_BASE_URL="http://127.0.0.1:5000"
+export AUTH0_CLIENT_SECRET="a_secret_will_be_provided_by_auth0_at_app_setup"
 flask db upgrade
 ```
 
 
 # Running the application
-Example below uses development configuration.
+If your still in the same shell session as when setting up the database the export commands are redundant.
 Execute:
+
 ```bash
+export DB_NAME="trade_compliance_monitor_dev"
+export DATABASE_URL="postgresql://postgres@localhost:5432/${DB_NAME}"
+export FLASK_APP="tcm_app"
 export APP_SETTINGS="config.DevelopmentConfig"
 export APP_BASE_URL="http://127.0.0.1:5000"
 export AUTH0_CLIENT_SECRET="a_secret_will_be_provided_by_auth0_at_app_setup"
@@ -103,7 +109,7 @@ flask run
 
 
 # Testing the application
-For testing two JWT will be required. Both can be acquired at the live mock application [here](https://trade-compliance-monitor.herokuapp.com/). An `EMPLOYEE_ROLE_ACCESS_TOKEN` can be acquired by logging in by any user. A `CO_ROLE_ACCESS_TOKEN` can be acquired by logging in by using email **john.doe@example** and password **verySimple1**. Make sure to logout between each login.
+For testing two JWT will be required. Both can be acquired at the live mock application running on Heroku [here](https://trade-compliance-monitor.herokuapp.com/). An `EMPLOYEE_ROLE_ACCESS_TOKEN` can be acquired by logging in by any user. A `CO_ROLE_ACCESS_TOKEN` can be acquired by logging in by using email **john.doe@example** and password **verySimple1**. Make sure to logout between each login.
 
 Please read section *Setting up local PostgreSQL database* for instructions on how to create `trade_compliance_monitor_test`, **but** note that database name now ends with "**test**" and not with "**dev**".
 
@@ -114,6 +120,7 @@ export EMPLOYEE_ROLE_ACCESS_TOKEN=<jwt_for_user_with_employee_role>
 export CO_ROLE_ACCESS_TOKEN=<jwt_for_user_with_employee_role>
 export DB_NAME="trade_compliance_monitor_test"
 export DATABASE_URL="postgresql://postgres@localhost:5432/${DB_NAME}"
+export FLASK_APP="tcm_app"
 export APP_SETTINGS="config.TestingConfig"
 export APP_BASE_URL="http://127.0.0.1:5000"
 export AUTH0_CLIENT_SECRET="a_secret_will_be_provided_by_auth0_at_app_setup"
