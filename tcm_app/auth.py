@@ -116,7 +116,7 @@ def check_permissions(permission, payload):
 
 
 def verify_decode_jwt(token):
-    """Based on example at TODO
+    """Partly based on example at https://auth0.com/docs/quickstart/backend/python/01-authorization
     """
     try:
         unverified_header = jwt.get_unverified_header(token)
