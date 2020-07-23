@@ -109,7 +109,7 @@ flask run
 
 
 # Testing the application
-For testing two JWT will be required. Both can be acquired at the live mock application running on Heroku [here](https://trade-compliance-monitor.herokuapp.com/). An `EMPLOYEE_ROLE_ACCESS_TOKEN` can be acquired by logging in by any user. A `CO_ROLE_ACCESS_TOKEN` can be acquired by logging in by using email **john.doe@example** and password **verySimple1**. Make sure to logout between each login.
+For testing two JWT will be required. Both can be acquired at the live mock application running on Heroku [here](https://trade-compliance-monitor.herokuapp.com/). An `EMPLOYEE_ROLE_ACCESS_TOKEN` can be acquired by logging in by any user. A `CO_ROLE_ACCESS_TOKEN` can be acquired by logging in by using email **john.doe@example.com** and password **verySimple1**. Make sure to logout between each login.
 
 Please read section *Setting up local PostgreSQL database* for instructions on how to create `trade_compliance_monitor_test`, **but** note that database name now ends with "**test**" and not with "**dev**".
 
