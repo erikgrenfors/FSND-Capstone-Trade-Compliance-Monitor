@@ -7,7 +7,8 @@ from marshmallow import ValidationError
 from werkzeug.exceptions import HTTPException
 
 from tcm_app.auth import require_token
-from tcm_app.models import Trade, TradePaperTrail, db, trade_schema, trades_schema
+from tcm_app.models import (
+  Trade, TradePaperTrail, db, trade_schema, trades_schema)
 import pandas as pd
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -77,7 +78,7 @@ class TradesView(SwaggerView):
             currency=data['currency'],
             quantity=data['quantity'],
             amount=data['amount'],
-            reporter=self.email,  # Originates from userinfo for current access token
+            reporter=self.email,  # From userinfo for current access token
             reported_at=datetime.utcnow()
         )
 
@@ -244,7 +245,8 @@ class ViolationsView(SwaggerView):
     @require_token('get:violations')
     def get(self):
         """
-        Fetch all trades (for the authenticated user) that violate holding period regulation.
+        Fetch all trades (for authenticated user) violating holding period
+        regulation
         ---
         responses:
           200:
@@ -341,7 +343,7 @@ class AllViolationsView(SwaggerView):
     @require_token('get:all-violations')
     def get(self):
         """
-        Fetch all trades (for all users) that violate holding period regulation.
+        Fetch all trades (for all users) violating holding period regulation
         ---
         responses:
           200:
@@ -489,19 +491,23 @@ def find_violations(trades):
             for duration, position_df in by_duration:
                 buy_sell_pairs = []
                 for i in range(len(position_df)):
-                    # -----------------------------------------------------------------
-                    # Use buy_id and sell_id from position table to query db for the
-                    # corresponding trades (again even though we already have them in
-                    # a dataframe)
-                    # WHY not using Pandas to_dict?
-                    # When importing using read_sql() certain types are converted
-                    # to something we don't want (e.g. decimal to numeric), and when
-                    # exporting using to_dict(orient='records') datetime turns
-                    # into Timespan.
-                    # With few expected violating trades query db again should be fine.
-                    # -----------------------------------------------------------------
-                    trade_data = Trade.query.filter(Trade.id.in_(
-                        (position_df.iloc[i, 0], position_df.iloc[i, 1]))).all()
+                    # ---------------------------------------------------------
+                    # Use buy_id and sell_id from position table to query db
+                    # for the corresponding trades (again even though we
+                    # already have them in a dataframe).
+                    # WHY not using Pandas to_dict method?
+                    # When importing using read_sql() certain types are
+                    # converted to something we don't want (e.g. decimal to
+                    # numeric), and when exporting using
+                    # to_dict(orient='records') datetime turns into Timespan.
+                    # However, with few expected violating trades querying the
+                    # database again should be fine.
+                    # ---------------------------------------------------------
+                    trade_data = Trade.query.filter(
+                        Trade.id.in_(
+                            (position_df.iloc[i, 0], position_df.iloc[i, 1])
+                        )
+                    ).all()
                     buy_sell_pairs.append(trades_schema.dump(trade_data))
                     ctr_violations += 1
 

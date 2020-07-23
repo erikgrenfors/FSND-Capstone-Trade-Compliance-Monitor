@@ -15,8 +15,8 @@ class TradeComplianceMonitor(unittest.TestCase):
         co_token = os.environ.get('CO_ROLE_ACCESS_TOKEN', None)
         if token is None:
             raise Exception(
-                "EMPLOYEE_ROLE_ACCESS_TOKEN environment variable is missing. " +
-                "It's value must be a JWT access token.")
+                "EMPLOYEE_ROLE_ACCESS_TOKEN environment variable is missing." +
+                " It's value must be a JWT access token.")
         if co_token is None:
             raise Exception(
                 "CO_ROLE_ACCESS_TOKEN environment variable is missing. " +
@@ -92,7 +92,8 @@ class TradeComplianceMonitor(unittest.TestCase):
 
         # Use CO as Employee reporting a violating trade (buy and sell)
         body = self.trade_json.copy()
-        res = self.client.post('/api/trades', headers=self.co_headers, json=body)
+        res = self.client.post(
+            '/api/trades', headers=self.co_headers, json=body)
         res = self.client.get('/api/trades/1', headers=self.co_headers)
         self.assertEqual(res.status_code, 200)
         # ... which other Employees cant see.
@@ -102,22 +103,27 @@ class TradeComplianceMonitor(unittest.TestCase):
 
     def test_patch_trade(self):
         body = self.trade_json.copy()
-        res = self.client.patch('/api/trades/1', headers=self.co_headers, json=body)
+        res = self.client.patch(
+            '/api/trades/1', headers=self.co_headers, json=body)
         self.assertEqual(res.status_code, 404)
 
         # Use CO as Employee reporting a trade to patch
         body = self.trade_json.copy()
-        res = self.client.post('/api/trades', headers=self.co_headers, json=body)
-        res = self.client.patch('/api/trades/1', headers=self.co_headers, json=body)
+        res = self.client.post(
+            '/api/trades', headers=self.co_headers, json=body)
+        res = self.client.patch(
+            '/api/trades/1', headers=self.co_headers, json=body)
         self.assertEqual(res.status_code, 204)
 
         body['quantity'] = 50
-        res = self.client.patch('/api/trades/1', headers=self.co_headers, json=body)
+        res = self.client.patch(
+            '/api/trades/1', headers=self.co_headers, json=body)
         self.assertEqual(res.status_code, 200)
 
         # ... which other Employees cant change.
         self.client.cookie_jar.clear()
-        res = self.client.patch('/api/trades/1', headers=self.headers, json=body)
+        res = self.client.patch(
+            '/api/trades/1', headers=self.headers, json=body)
         self.assertEqual(res.status_code, 404)
 
     def test_delete_trade(self):
@@ -126,8 +132,10 @@ class TradeComplianceMonitor(unittest.TestCase):
 
         # Use CO as Employee reporting two trades
         body = self.trade_json.copy()
-        res = self.client.post('/api/trades', headers=self.co_headers, json=body)
-        res = self.client.post('/api/trades', headers=self.co_headers, json=body)
+        res = self.client.post(
+            '/api/trades', headers=self.co_headers, json=body)
+        res = self.client.post(
+            '/api/trades', headers=self.co_headers, json=body)
         # ... which he/she can delete ...
         res = self.client.delete('/api/trades/1', headers=self.co_headers)
         self.assertEqual(res.status_code, 204)
@@ -167,18 +175,19 @@ class TradeComplianceMonitor(unittest.TestCase):
         res = self.client.get('/api/violations', headers=self.co_headers)
         self.assertEqual(res.status_code, 204)
 
-
     def test_get_all_violations(self):
         res = self.client.get('/api/all-violations', headers=self.co_headers)
         self.assertEqual(res.status_code, 204)
 
         # Use CO as Employee reporting a violating trade (buy and sell)
         body = self.trade_json.copy()
-        res = self.client.post('/api/trades', headers=self.co_headers, json=body)
+        res = self.client.post(
+            '/api/trades', headers=self.co_headers, json=body)
         body['date'] = '2020-01-15'
         body['price'] = 375
         body['direction'] = 'Sell'
-        res = self.client.post('/api/trades', headers=self.co_headers, json=body)
+        res = self.client.post(
+            '/api/trades', headers=self.co_headers, json=body)
         # Now there are a violation ...
         res = self.client.get('/api/all-violations', headers=self.co_headers)
         self.assertEqual(res.status_code, 200)

@@ -105,10 +105,11 @@ def get_token_auth_header():
 
 
 def check_permissions(permission, payload):
-    """Checks whether JWT payload includes any of the listed items in permission.
+    """Checks whether JWT payload includes any of listed items in permission.
     Raises an exception when no permission.
     """
-    if 'permissions' not in payload or permission not in payload['permissions']:
+    if ('permissions' not in payload or
+            permission not in payload['permissions']):
         message = 'You are not permitted to access the requested resource.'
         # Consider 404, as described at https://httpstatuses.com/403
         abort(403, description=message)
@@ -116,7 +117,8 @@ def check_permissions(permission, payload):
 
 
 def verify_decode_jwt(token):
-    """Partly based on example at https://auth0.com/docs/quickstart/backend/python/01-authorization
+    """Partly based on example at
+    https://auth0.com/docs/quickstart/backend/python/01-authorization
     """
     try:
         unverified_header = jwt.get_unverified_header(token)
@@ -157,7 +159,8 @@ def verify_decode_jwt(token):
         except Exception:
             abort(401, description='Unable to parse provided JWT.')
 
-    abort(401, description='Unable to find the appropriate key in provided JWT.')
+    abort(
+        401, description='Unable to find the appropriate key in provided JWT.')
 
 
 def get_email(token):

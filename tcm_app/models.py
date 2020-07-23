@@ -14,7 +14,8 @@ db = SQLAlchemy()
 # ---
 def validate_isin(a):
     """Raises an error when ISIN is invalid.
-    Code adapted from: https://rosettacode.org/wiki/Validate_International_Securities_Identification_Number#Python
+    Code adapted from:
+    https://rosettacode.org/wiki/Validate_International_Securities_Identification_Number#Python
     """
     if len(a) != 12 or not all(c.isalpha() for c in a[:2]) or not all(
             c.isalnum() for c in a[2:]):

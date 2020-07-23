@@ -24,7 +24,6 @@ class Config(object):
     AUTH0_CALLBACK_URL = APP_BASE_URL + '/callback'
 
 
-
 class ProductionConfig(Config):
     DEBUG = False
 

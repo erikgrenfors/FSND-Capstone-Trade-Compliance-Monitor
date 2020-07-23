@@ -13,8 +13,8 @@ from tcm_app.models import TradeSchema
 
 def create_app():
     """Application factory based on:
-    * https://flask.palletsprojects.com/en/1.1.x/patterns/appfactories/#basic-factories
-    * https://flask.palletsprojects.com/en/1.1.x/tutorial/factory/#the-application-factory
+    https://flask.palletsprojects.com/en/1.1.x/patterns/appfactories/#basic-factories
+    https://flask.palletsprojects.com/en/1.1.x/tutorial/factory/#the-application-factory
     """
     app = Flask(
         __name__, static_url_path='/static/css', static_folder='./static/css')
@@ -28,14 +28,12 @@ def create_app():
     app.config['SESSION_TYPE'] = 'filesystem'  # Flask-Session
     Session(app)
 
-
     # ---
     # MODELS
     # ---
     from tcm_app.models import db
     db.init_app(app)
     migrate = Migrate(app, db)
-
 
     # ---
     # AUTHORIZATION
@@ -44,13 +42,11 @@ def create_app():
     app.register_blueprint(auth.bp)
     auth.oauth.init_app(app)
 
-
     # ---
     # API ENDPOINTS
     # ---
     from tcm_app import api
     app.register_blueprint(api.bp)
-
 
     # ---
     # SWAGGER
@@ -75,16 +71,19 @@ def create_app():
                     'bearerFormat': 'JWT'
                 },
                 # Alternative authorization. Requires pasting Client Id as well
-                # as checking boxes for scope, but applies the token automatically.
+                # as checking boxes for scope, but applies the token
+                # automatically.
                 'implicitFlow': {
                     'type': 'oauth2',
                     'flows': {
                         'implicit': {
-                            'authorizationUrl': '{}/authorize?audience={}'.format(
-                                app.config['AUTH0_API_BASE_URL'],
-                                app.config['AUTH0_AUDIENCE']
+                            'authorizationUrl': (
+                                '{}/authorize?audience={}'.format(
+                                    app.config['AUTH0_API_BASE_URL'],
+                                    app.config['AUTH0_AUDIENCE']
+                                )
                             ),
-                            'scopes':{
+                            'scopes': {
                                 'openid': '',
                                 'email': ''
                             }
@@ -100,9 +99,11 @@ def create_app():
                 #     'type': 'oauth2',
                 #     'flows': {
                 #         'authorizationCode': {
-                #             'authorizationUrl': '{}/authorize?audience={}'.format(
-                #                 app.config['AUTH0_API_BASE_URL'],
-                #                 app.config['AUTH0_AUDIENCE']
+                #             'authorizationUrl': (
+                #                 '{}/authorize?audience={}'.format(
+                #                     app.config['AUTH0_API_BASE_URL'],
+                #                     app.config['AUTH0_AUDIENCE']
+                #                 )
                 #             ),
                 #             'tokenUrl': '{}/oauth/token'.format(
                 #                 app.config['AUTH0_API_BASE_URL']
@@ -118,7 +119,7 @@ def create_app():
         },
         security=[
             {
-            'bearerAuth': [],
+                'bearerAuth': [],
             },
             {
                 'implicitFlow': []
@@ -139,7 +140,7 @@ def create_app():
             'oauth2RedirectUrl': '{}/oauth2-redirect'.format(
                 app.config['SWAGGER_BASE_URL']
             ),
-            'tagsSorter' : "alpha"
+            'tagsSorter': 'alpha'
         }
     }
 
